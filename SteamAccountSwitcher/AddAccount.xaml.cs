@@ -45,7 +45,8 @@ namespace SteamAccountSwitcher
             textBoxProfilename.Text = editAccount.Name;
             textBoxUsername.Text = editAccount.Username;
             textBoxPassword.Password = editAccount.Password;
-            
+
+            Title = "Edit Account";
         }
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)
