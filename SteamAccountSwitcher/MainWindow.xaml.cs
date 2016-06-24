@@ -53,6 +53,12 @@ namespace SteamAccountSwitcher
             {
                 WindowState = WindowState.Maximized;
             }
+
+            if (Properties.Settings.Default.HideOnStartup)
+            {
+                Hide();
+                notifyIcon.ShowBalloonTip("Steam Account Switcher", "The application has been launched.", BalloonIcon.Info);
+            }
         }
 
         internal static void RefreshLists()
@@ -92,7 +98,7 @@ namespace SteamAccountSwitcher
                 newAccWindow.Owner = this;
                 newAccWindow.ShowDialog();
 
-                if (newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
+                if (newAccWindow.DialogResult != null && newAccWindow.DialogResult.Value && newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
                 {
                     AccountList.Accounts[AccountsListView.SelectedIndex] = newAccWindow.Account;
                     RefreshLists();
@@ -138,21 +144,19 @@ namespace SteamAccountSwitcher
             if (WindowState == WindowState.Minimized)
             {
                 Hide();
-
-                if (!Properties.Settings.Default.HideBalloonTip)
-                    notifyIcon.ShowBalloonTip("Steam Account Switched", "The window has been minimized to the tray.", BalloonIcon.Info);
             }
-        }
-
-        private void NotifyIcon_TrayBalloonTipClicked(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.HideBalloonTip = true;
-            Properties.Settings.Default.Save();
         }
 
         private void NotifyIcon_NotifyIconDoubleClick(object sender, RoutedEventArgs e)
         {
             Show();
+        }
+
+        private void OptionsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Options();
+            window.Owner = this;
+            window.ShowDialog();
         }
     }
 }

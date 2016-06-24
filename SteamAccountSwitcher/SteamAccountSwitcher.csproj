@@ -81,13 +81,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AccountList.cs" />
-    <Compile Include="AccountType.cs" />
     <Compile Include="AddAccount.xaml.cs">
       <DependentUpon>AddAccount.xaml</DependentUpon>
     </Compile>
     <Compile Include="Crypto.cs" />
     <Compile Include="NotifyIconPopup.xaml.cs">
       <DependentUpon>NotifyIconPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Options.xaml.cs">
+      <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
     <Compile Include="Steam.cs" />
     <Compile Include="SteamAccount.cs" />
@@ -111,6 +113,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NotifyIconPopup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Options.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
