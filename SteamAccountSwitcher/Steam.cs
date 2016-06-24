@@ -8,7 +8,7 @@ using System.IO;
 
 namespace SteamAccountSwitcher
 {
-    class Steam
+    public class Steam
     {
         string installDir;
 

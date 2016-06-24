@@ -18,6 +18,9 @@ using System.Xml.Serialization;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.Reflection;
+using Hardcodet.Wpf.TaskbarNotification;
+using Hardcodet.Wpf.TaskbarNotification.Interop;
+using SteamAccountSwitcher.UserControls;
 
 namespace SteamAccountSwitcher
 {
@@ -28,14 +31,18 @@ namespace SteamAccountSwitcher
     
     public partial class MainWindow : Window
     {
-        AccountList accountList;
-        Steam steam;
+        public AccountList AccountList {get { return AccountsListView.AccountList; } }
+        public Steam Steam { get { return AccountsListView.Steam; } }
 
-        string settingsSave;
-
+        public static List<ListView> AccountListViews { get; private set; } // Keep track of all account list views.
+        
         public MainWindow()
         {
+            AccountListViews = new List<ListView>();
+
             InitializeComponent();
+
+            this.buttonInfo.ToolTip = "Build Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString();
 
             this.Top = Properties.Settings.Default.Top;
             this.Left = Properties.Settings.Default.Left;
@@ -46,56 +53,22 @@ namespace SteamAccountSwitcher
             {
                 WindowState = WindowState.Maximized;
             }
-
-            accountList = new AccountList();
-            
-            //Get directory of Executable
-            settingsSave = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimStart(@"file:\\".ToCharArray());
-
-            this.buttonInfo.ToolTip = "Build Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString();
-
-            try
-            {
-                ReadAccountsFromFile();
-            }
-            catch
-            {
-                //Maybe create file?
-            }
-
-            
-
-            listBoxAccounts.ItemsSource = accountList.Accounts;
-            listBoxAccounts.Items.Refresh();
-
-            if (accountList.InstallDir == "" || (accountList.InstallDir == null))
-            {
-                accountList.InstallDir = SelectSteamFile(@"C:\Program Files (x86)\Steam");
-                if(accountList.InstallDir == null)
-                {
-                    MessageBox.Show("You cannot use SteamAccountSwitcher without selecting your Steam.exe. Program will close now.", "Steam missing", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Close();
-                }
-            }
-
-            steam = new Steam(accountList.InstallDir);
-            
         }
 
-        private string SelectSteamFile(string initialDirectory)
+        internal static void RefreshLists()
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter =
-               "Steam |steam.exe";
-            dialog.InitialDirectory = initialDirectory;
-            dialog.Title = "Select your Steam Installation";
-            return (dialog.ShowDialog() == true)
-               ? dialog.FileName : null;
+            AccountListViews.ForEach(list => list.Items.Refresh());
+        }
+
+        public new void Show()
+        {
+            base.Show();
+            WindowState = WindowState.Normal; // Unminimize the window.
         }
 
         private void buttonLogout_Click(object sender, RoutedEventArgs e)
         {
-            steam.LogoutSteam();
+            Steam.LogoutSteam();
         }
 
         private void buttonAddAccount_Click(object sender, RoutedEventArgs e)
@@ -106,73 +79,29 @@ namespace SteamAccountSwitcher
 
             if (newAccWindow.Account != null)
             {
-                accountList.Accounts.Add(newAccWindow.Account);
-
-                listBoxAccounts.Items.Refresh();
+                AccountList.Accounts.Add(newAccWindow.Account);
+                RefreshLists();
             }
         }
-
-        public void WriteAccountsToFile()
-        {
-            string xmlAccounts = this.ToXML<AccountList>(accountList);
-            StreamWriter file = new System.IO.StreamWriter(settingsSave + "\\accounts.ini");
-            file.Write(Crypto.Encrypt(xmlAccounts));
-            file.Close();
-        }
-
-        public void ReadAccountsFromFile()
-        {
-            string text = System.IO.File.ReadAllText(settingsSave + "\\accounts.ini");
-            accountList = FromXML<AccountList>(Crypto.Decrypt(text));
-        }
-
-        public static T FromXML<T>(string xml)
-        {
-            using (StringReader stringReader = new StringReader(xml))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                return (T)serializer.Deserialize(stringReader);
-            }
-        }
-
-        public string ToXML<T>(T obj)
-        {
-            using (StringWriter stringWriter = new StringWriter(new StringBuilder()))
-            {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-                xmlSerializer.Serialize(stringWriter, obj);
-                return stringWriter.ToString();
-            }
-        }
-
-        private void listBoxAccounts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SteamAccount selectedAcc = (SteamAccount)listBoxAccounts.SelectedItem;
-            steam.StartSteamAccount(selectedAcc);
-        }
-
 
         private void buttonEditAccount_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxAccounts.SelectedItem != null)
+            if (AccountsListView.SelectedItem != null)
             {
-                AddAccount newAccWindow = new AddAccount((SteamAccount)listBoxAccounts.SelectedItem);
+                AddAccount newAccWindow = new AddAccount((SteamAccount)AccountsListView.SelectedItem);
                 newAccWindow.Owner = this;
                 newAccWindow.ShowDialog();
 
                 if (newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
                 {
-                    accountList.Accounts[listBoxAccounts.SelectedIndex] = newAccWindow.Account;
-
-                    listBoxAccounts.Items.Refresh();
+                    AccountList.Accounts[AccountsListView.SelectedIndex] = newAccWindow.Account;
+                    RefreshLists();
                 }
             }
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            WriteAccountsToFile();
-
             if (WindowState == WindowState.Maximized)
             {
                 // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
@@ -194,22 +123,36 @@ namespace SteamAccountSwitcher
             Properties.Settings.Default.Save();
         }
 
-        private void Image_MouseUp(object sender, MouseButtonEventArgs e)
+        private void NotifyIcon_ClickShow(object sender, RoutedEventArgs e)
         {
-            Image itemClicked = (Image)e.Source;
+            Show();
+        }
 
-            SteamAccount selectedAcc = (SteamAccount)itemClicked.DataContext;
-            MessageBoxResult dialogResult = MessageBox.Show("Are you sure you want to delete the '" + selectedAcc.Name + "' account?", "Delete Account", MessageBoxButton.YesNo);
-            if (dialogResult == MessageBoxResult.Yes)
+        private void NotifyIcon_ClickExit(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
             {
-                accountList.Accounts.Remove((SteamAccount)listBoxAccounts.SelectedItem);
-                listBoxAccounts.Items.Refresh();
-            }
-            else if (dialogResult == MessageBoxResult.No)
-            {
-                //do something else
+                Hide();
+
+                if (!Properties.Settings.Default.HideBalloonTip)
+                    notifyIcon.ShowBalloonTip("Steam Account Switched", "The window has been minimized to the tray.", BalloonIcon.Info);
             }
         }
 
+        private void NotifyIcon_TrayBalloonTipClicked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.HideBalloonTip = true;
+            Properties.Settings.Default.Save();
+        }
+
+        private void NotifyIcon_NotifyIconDoubleClick(object sender, RoutedEventArgs e)
+        {
+            Show();
+        }
     }
 }
