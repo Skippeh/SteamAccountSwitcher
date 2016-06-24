@@ -10,7 +10,11 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <ContextMenu x:Key="ContextMenu">
-            <MenuItem Header="Edit" Click="ContextMenu_ClickEdit"></MenuItem>
+            <MenuItem Header="Edit" Click="ContextMenu_ClickEdit">
+                <MenuItem.Icon>
+                    <Image Source="/edit.png"></Image>
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>
     </UserControl.Resources>
     <Grid>
