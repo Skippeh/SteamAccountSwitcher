@@ -179,5 +179,18 @@ namespace SteamAccountSwitcher.UserControls
                 }
             }
         }
+
+        private void ContextMenu_ClickAdd(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddAccount();
+            dialog.Owner = Window.GetWindow(this);
+            dialog.ShowDialog();
+
+            if (dialog.IsInputValid())
+            {
+                AccountList.Accounts.Add(dialog.Account);
+                RefreshList();
+            }
+        }
     }
 }
