@@ -56,11 +56,11 @@ namespace SteamAccountSwitcher
             {
                 if (this.type == AccountType.Main)
                 {
-                    return "steam-ico-main.png";
+                    return "/steam-ico-main.png";
                 }
                 if(this.type == AccountType.Smurf)
                 {
-                    return "steam-ico-smurf.png";
+                    return "/steam-ico-smurf.png";
                 }
                 return null;
             }
