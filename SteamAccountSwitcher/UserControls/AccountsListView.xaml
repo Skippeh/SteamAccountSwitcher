@@ -9,9 +9,12 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Header="Edit" Click="ContextMenu_ClickEdit"></MenuItem>
+        </ContextMenu>
     </UserControl.Resources>
     <Grid>
-        <ListView x:Name="listBoxAccounts" Margin="10" MouseDoubleClick="listBoxAccounts_MouseDoubleClick">
+        <ListView x:Name="listBoxAccounts" Margin="10" MouseDoubleClick="listBoxAccounts_MouseDoubleClick" ContextMenu="{StaticResource ContextMenu}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">
