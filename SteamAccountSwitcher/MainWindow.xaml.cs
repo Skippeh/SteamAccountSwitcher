@@ -41,9 +41,7 @@ namespace SteamAccountSwitcher
             AccountListViews = new List<ListView>();
 
             InitializeComponent();
-
-            this.buttonInfo.ToolTip = "Build Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString();
-
+            
             this.Top = Properties.Settings.Default.Top;
             this.Left = Properties.Settings.Default.Left;
             this.Height = Properties.Settings.Default.Height;
@@ -76,11 +74,6 @@ namespace SteamAccountSwitcher
         {
             base.Show();
             WindowState = WindowState.Normal; // Unminimize the window.
-        }
-
-        private void buttonLogout_Click(object sender, RoutedEventArgs e)
-        {
-            Steam.LogoutSteam();
         }
 
         private void buttonAddAccount_Click(object sender, RoutedEventArgs e)
