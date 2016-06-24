@@ -32,6 +32,7 @@ namespace SteamAccountSwitcher
             account = new SteamAccount();
             InitializeComponent();
             comboBoxType.ItemsSource = Enum.GetValues(typeof(AccountType));
+            comboBoxType.SelectedIndex = 0;
         }
 
         public AddAccount(SteamAccount editAccount)
