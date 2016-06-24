@@ -1,0 +1,17 @@
+﻿<Window x:Class="SteamAccountSwitcher.Options"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SteamAccountSwitcher"
+        mc:Ignorable="d"
+        Title="Options" Height="200" Width="250"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="10">
+        <CheckBox x:Name="Checkbox_HideOnStartup" Content="Minimize to tray on startup" VerticalAlignment="Top" />
+
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Save" Width="35" Click="Button_ClickSave" />
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Cancel" Margin="40,0,0,0" Click="Button_ClickCancel" Width="45" />
+    </Grid>
+</Window>

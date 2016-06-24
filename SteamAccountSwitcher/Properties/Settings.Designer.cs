@@ -86,12 +86,12 @@ namespace SteamAccountSwitcher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool HideBalloonTip {
+        public bool HideOnStartup {
             get {
-                return ((bool)(this["HideBalloonTip"]));
+                return ((bool)(this["HideOnStartup"]));
             }
             set {
-                this["HideBalloonTip"] = value;
+                this["HideOnStartup"] = value;
             }
         }
     }

@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:SteamAccountSwitcher"
              xmlns:userControls="clr-namespace:SteamAccountSwitcher.UserControls"
              mc:Ignorable="d"
-             Width="300"
-             Height="300">
+             Width="280"
+             Height="320">
     <Grid Background="White">
-        <userControls:AccountsListView x:Name="AccountsListView" x:FieldModifier="public" ShowDeleteButton="False" />
+        <userControls:AccountsListView x:Name="AccountsListView" x:FieldModifier="public" ShowDeleteButton="False" BorderBrush="#ABADB3" BorderThickness="1" />
     </Grid>
 </UserControl>

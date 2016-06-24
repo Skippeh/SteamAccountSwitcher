@@ -31,17 +31,13 @@ namespace SteamAccountSwitcher
         {
             account = new SteamAccount();
             InitializeComponent();
-            comboBoxType.ItemsSource = Enum.GetValues(typeof(AccountType));
-            comboBoxType.SelectedIndex = 0;
         }
 
         public AddAccount(SteamAccount editAccount)
         {
             InitializeComponent();
             account = editAccount;
-            comboBoxType.ItemsSource = Enum.GetValues(typeof(AccountType));
-
-            comboBoxType.SelectedItem = editAccount.Type;
+            
             textBoxProfilename.Text = editAccount.Name;
             textBoxUsername.Text = editAccount.Username;
             textBoxPassword.Password = editAccount.Password;
@@ -53,7 +49,6 @@ namespace SteamAccountSwitcher
         {
             try
             {
-                account.Type = (AccountType)comboBoxType.SelectedItem;
                 account.Name = textBoxProfilename.Text;
                 account.Username = textBoxUsername.Text;
                 account.Password = textBoxPassword.Password;
@@ -82,6 +77,15 @@ namespace SteamAccountSwitcher
                 return false;
 
             return !string.IsNullOrEmpty(account.Username) && !string.IsNullOrEmpty(account.Password);
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && e.OriginalSource is Window)
+            {
+                account = null;
+                Close();
+            }
         }
     }
 }

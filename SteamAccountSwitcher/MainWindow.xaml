@@ -21,22 +21,15 @@
                         PopupActivation="LeftClick"
                         ToolTipText="Steam Account Switcher"
                         ContextMenu="{StaticResource TrayContextMenu}"
-                        TrayBalloonTipClicked="NotifyIcon_TrayBalloonTipClicked"
                         TrayMouseDoubleClick="NotifyIcon_NotifyIconDoubleClick"
                         NoLeftClickDelay="True">
             <tb:TaskbarIcon.TrayPopup>
                 <local:NotifyIconPopup></local:NotifyIconPopup>
             </tb:TaskbarIcon.TrayPopup>
         </tb:TaskbarIcon>
-        <userControls:AccountsListView x:Name="AccountsListView" />
+        <userControls:AccountsListView x:Name="AccountsListView" Margin="10 0 10 45" />
 
-        <Button x:Name="buttonAddAccount" Content="Add" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="buttonAddAccount_Click" HorizontalAlignment="Left" Width="35"/>
-        <Button x:Name="buttonEditAccount" Content="Edit" Margin="45,0,0,10" Click="buttonEditAccount_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35"/>
-
-        <Button x:Name="buttonLogout" Content="Steam Logout" Margin="0,0,45,10" Click="buttonLogout_Click" Foreground="#FFDC0000" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="86"/>
-        <Button x:Name="buttonInfo" Content="Info" Margin="0,0,10,10"  Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="35"/>
-
-
-
+        <Button x:Name="buttonAddAccount" Content="Add" Margin="10,0,0,10" VerticalAlignment="Bottom" Click="buttonAddAccount_Click" HorizontalAlignment="Left" Width="30" Height="25" />
+        <Button x:Name="buttonOptions" Content="Options" Margin="45,0,0,10" Click="OptionsBtn_Click" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="25" Width="50" />
     </Grid>
 </Window>

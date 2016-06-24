@@ -41,17 +41,27 @@ namespace SteamAccountSwitcher
             AccountListViews = new List<ListView>();
 
             InitializeComponent();
-
-            this.buttonInfo.ToolTip = "Build Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString();
-
+            
             this.Top = Properties.Settings.Default.Top;
             this.Left = Properties.Settings.Default.Left;
             this.Height = Properties.Settings.Default.Height;
             this.Width = Properties.Settings.Default.Width;
+            
+            if (Top == 0 && Left == 0) // Default to the center of the screen.
+            {
+                Top = (SystemParameters.PrimaryScreenHeight / 2) - (Height / 2);
+                Left = (SystemParameters.PrimaryScreenWidth / 2) - (Width / 2);
+            }
 
             if (Properties.Settings.Default.Maximized)
             {
                 WindowState = WindowState.Maximized;
+            }
+
+            if (Properties.Settings.Default.HideOnStartup)
+            {
+                Hide();
+                notifyIcon.ShowBalloonTip("Steam Account Switcher", "The application has been launched.", BalloonIcon.Info);
             }
         }
 
@@ -66,11 +76,6 @@ namespace SteamAccountSwitcher
             WindowState = WindowState.Normal; // Unminimize the window.
         }
 
-        private void buttonLogout_Click(object sender, RoutedEventArgs e)
-        {
-            Steam.LogoutSteam();
-        }
-
         private void buttonAddAccount_Click(object sender, RoutedEventArgs e)
         {
             AddAccount newAccWindow = new AddAccount();
@@ -81,22 +86,6 @@ namespace SteamAccountSwitcher
             {
                 AccountList.Accounts.Add(newAccWindow.Account);
                 RefreshLists();
-            }
-        }
-
-        private void buttonEditAccount_Click(object sender, RoutedEventArgs e)
-        {
-            if (AccountsListView.SelectedItem != null)
-            {
-                AddAccount newAccWindow = new AddAccount((SteamAccount)AccountsListView.SelectedItem);
-                newAccWindow.Owner = this;
-                newAccWindow.ShowDialog();
-
-                if (newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
-                {
-                    AccountList.Accounts[AccountsListView.SelectedIndex] = newAccWindow.Account;
-                    RefreshLists();
-                }
             }
         }
 
@@ -138,21 +127,19 @@ namespace SteamAccountSwitcher
             if (WindowState == WindowState.Minimized)
             {
                 Hide();
-
-                if (!Properties.Settings.Default.HideBalloonTip)
-                    notifyIcon.ShowBalloonTip("Steam Account Switched", "The window has been minimized to the tray.", BalloonIcon.Info);
             }
-        }
-
-        private void NotifyIcon_TrayBalloonTipClicked(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.HideBalloonTip = true;
-            Properties.Settings.Default.Save();
         }
 
         private void NotifyIcon_NotifyIconDoubleClick(object sender, RoutedEventArgs e)
         {
             Show();
+        }
+
+        private void OptionsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Options();
+            window.Owner = this;
+            window.ShowDialog();
         }
     }
 }
