@@ -7,7 +7,8 @@
         xmlns:userControls="clr-namespace:SteamAccountSwitcher.UserControls"
         Title="Steam Account Switcher" Height="300" Width="280"
         Closing="Window_Closing" MinHeight="360" MinWidth="350"
-        StateChanged="Window_StateChanged">
+        StateChanged="Window_StateChanged"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Resources>
             <ContextMenu x:Key="TrayContextMenu">
