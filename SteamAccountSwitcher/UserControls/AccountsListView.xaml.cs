@@ -162,5 +162,22 @@ namespace SteamAccountSwitcher.UserControls
             SteamAccount selectedAcc = (SteamAccount)listBoxAccounts.SelectedItem;
             Steam.StartSteamAccount(selectedAcc);
         }
+
+        private void ContextMenu_ClickEdit(object sender, RoutedEventArgs e)
+        {
+            if (listBoxAccounts.SelectedItem != null)
+            {
+                var steamAccount = (SteamAccount) listBoxAccounts.SelectedItem;
+                var dialog = new AddAccount(steamAccount);
+                dialog.Owner = Window.GetWindow(this);
+                dialog.ShowDialog();
+
+                if (dialog.IsInputValid())
+                {
+                    AccountList.Accounts[listBoxAccounts.SelectedIndex] = dialog.Account;
+                    RefreshList();
+                }
+            }
+        }
     }
 }

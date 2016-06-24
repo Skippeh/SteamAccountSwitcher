@@ -68,11 +68,19 @@ namespace SteamAccountSwitcher
         {
             if (account != null)
             {
-                if (account.Username == "" || account.Username == null)
+                if (!IsInputValid())
                 {
                     account = null;
                 }
             }
+        }
+
+        public bool IsInputValid()
+        {
+            if (account == null)
+                return false;
+
+            return !string.IsNullOrEmpty(account.Username) && !string.IsNullOrEmpty(account.Password);
         }
     }
 }
