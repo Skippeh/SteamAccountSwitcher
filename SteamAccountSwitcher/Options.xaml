@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SteamAccountSwitcher"
         mc:Ignorable="d"
         Title="Options" Height="200" Width="250"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
     <Grid Margin="10">
         <CheckBox x:Name="Checkbox_HideOnStartup" Content="Minimize to tray on startup" VerticalAlignment="Top" />
         <Separator VerticalAlignment="Bottom" Margin="0 22"/>
