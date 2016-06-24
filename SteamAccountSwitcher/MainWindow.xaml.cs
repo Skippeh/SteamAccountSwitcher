@@ -48,6 +48,12 @@ namespace SteamAccountSwitcher
             this.Left = Properties.Settings.Default.Left;
             this.Height = Properties.Settings.Default.Height;
             this.Width = Properties.Settings.Default.Width;
+            
+            if (Top == 0 && Left == 0) // Default to the center of the screen.
+            {
+                Top = (SystemParameters.PrimaryScreenHeight / 2) - (Height / 2);
+                Left = (SystemParameters.PrimaryScreenWidth / 2) - (Width / 2);
+            }
 
             if (Properties.Settings.Default.Maximized)
             {
