@@ -23,8 +23,9 @@
             </MenuItem>
         </ContextMenu>
     </UserControl.Resources>
-    <Grid>
-        <ListView x:Name="listBoxAccounts" Margin="10" MouseDoubleClick="listBoxAccounts_MouseDoubleClick" ContextMenu="{StaticResource ContextMenu}">
+    <Grid Background="#FFFFFF">
+        <TextBlock Text="Accounts" FontSize="20" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" />
+        <ListView Margin="0 30 0 0" x:Name="listBoxAccounts" MouseDoubleClick="listBoxAccounts_MouseDoubleClick" ContextMenu="{StaticResource ContextMenu}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch">

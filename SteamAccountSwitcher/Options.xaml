@@ -10,9 +10,8 @@
         ResizeMode="NoResize">
     <Grid Margin="10">
         <CheckBox x:Name="Checkbox_HideOnStartup" Content="Minimize to tray on startup" VerticalAlignment="Top" />
-        <Separator VerticalAlignment="Bottom" Margin="0 22"/>
-        
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Save" Width="30" Click="Button_ClickSave" />
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Cancel" Margin="32 0" Click="Button_ClickCancel" />
+
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Save" Width="35" Click="Button_ClickSave" />
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Left" Content="Cancel" Margin="40,0,0,0" Click="Button_ClickCancel" Width="45" />
     </Grid>
 </Window>
