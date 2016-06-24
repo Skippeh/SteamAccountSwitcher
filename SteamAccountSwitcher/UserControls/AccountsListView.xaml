@@ -10,14 +10,15 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <ContextMenu x:Key="ContextMenu">
-            <MenuItem Header="Add" Click="ContextMenu_ClickAdd">
-                <MenuItem.Icon>
-                    <Image Source="/add.png"></Image>
-                </MenuItem.Icon>
-            </MenuItem>
             <MenuItem Header="Edit" Click="ContextMenu_ClickEdit">
                 <MenuItem.Icon>
                     <Image Source="/edit.png"></Image>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Add" Click="ContextMenu_ClickAdd">
+                <MenuItem.Icon>
+                    <Image Source="/add.png"></Image>
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
