@@ -89,22 +89,6 @@ namespace SteamAccountSwitcher
             }
         }
 
-        private void buttonEditAccount_Click(object sender, RoutedEventArgs e)
-        {
-            if (AccountsListView.SelectedItem != null)
-            {
-                AddAccount newAccWindow = new AddAccount((SteamAccount)AccountsListView.SelectedItem);
-                newAccWindow.Owner = this;
-                newAccWindow.ShowDialog();
-
-                if (newAccWindow.DialogResult != null && newAccWindow.DialogResult.Value && newAccWindow.Account.Username != "" && newAccWindow.Account.Password != "")
-                {
-                    AccountList.Accounts[AccountsListView.SelectedIndex] = newAccWindow.Account;
-                    RefreshLists();
-                }
-            }
-        }
-
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (WindowState == WindowState.Maximized)
