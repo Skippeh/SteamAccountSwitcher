@@ -18,6 +18,7 @@ using System.Xml.Serialization;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.Reflection;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace SteamAccountSwitcher
 {
@@ -80,6 +81,12 @@ namespace SteamAccountSwitcher
 
             steam = new Steam(accountList.InstallDir);
             
+        }
+
+        public new void Show()
+        {
+            base.Show();
+            WindowState = WindowState.Normal; // Unminimize the window.
         }
 
         private string SelectSteamFile(string initialDirectory)
@@ -211,5 +218,36 @@ namespace SteamAccountSwitcher
             }
         }
 
+        private void NotifyIcon_ClickShow(object sender, RoutedEventArgs e)
+        {
+            Show();
+        }
+
+        private void NotifyIcon_ClickExit(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide();
+
+                if (!Properties.Settings.Default.HideBalloonTip)
+                    notifyIcon.ShowBalloonTip("Steam Account Switched", "The window has been minimized to the tray.", BalloonIcon.Info);
+            }
+        }
+
+        private void NotifyIcon_TrayBalloonTipClicked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.HideBalloonTip = true;
+            Properties.Settings.Default.Save();
+        }
+
+        private void NotifyIcon_NotifyIconDoubleClick(object sender, RoutedEventArgs e)
+        {
+            Show();
+        }
     }
 }

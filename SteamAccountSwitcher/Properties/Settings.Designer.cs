@@ -82,5 +82,17 @@ namespace SteamAccountSwitcher.Properties {
                 this["Maximized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideBalloonTip {
+            get {
+                return ((bool)(this["HideBalloonTip"]));
+            }
+            set {
+                this["HideBalloonTip"] = value;
+            }
+        }
     }
 }
