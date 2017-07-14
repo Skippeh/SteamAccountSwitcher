@@ -110,6 +110,15 @@ namespace SteamAccountSwitcher
             }
 
             Properties.Settings.Default.Save();
+
+	        try
+	        {
+		        AccountsListView.WriteAccountsToFile();
+	        }
+	        catch (Exception ex)
+	        {
+		        MessageBox.Show("Failed to save accounts.\n\n" + ex, "Error");
+	        }
         }
 
         private void NotifyIcon_ClickShow(object sender, RoutedEventArgs e)

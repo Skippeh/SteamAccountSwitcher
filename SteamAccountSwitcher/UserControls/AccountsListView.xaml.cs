@@ -33,7 +33,13 @@ namespace SteamAccountSwitcher.UserControls
 
         public bool ShowDeleteButton { get; set; }
 
-        private readonly string settingsSave;
+        private static readonly string settingsSave;
+
+	    static AccountsListView()
+	    {
+			//Get directory of Executable
+			settingsSave = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimStart(@"file:\\".ToCharArray());
+		}
 
         public AccountsListView()
         {
@@ -45,9 +51,6 @@ namespace SteamAccountSwitcher.UserControls
             {
                 AccountList = new AccountList();
 
-                //Get directory of Executable
-                settingsSave = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimStart(@"file:\\".ToCharArray());
-
 #if DEBUG
                 if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 {
@@ -57,9 +60,12 @@ namespace SteamAccountSwitcher.UserControls
                     {
                         ReadAccountsFromFile();
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        //Maybe create file?
+	                    if (!(ex is FileNotFoundException))
+						{
+							MessageBox.Show("Failed to read accounts.\n\n" + ex, "Warning");
+						}
                     }
 
                     if (AccountList.InstallDir == "" || (AccountList.InstallDir == null))
@@ -111,9 +117,9 @@ namespace SteamAccountSwitcher.UserControls
                ? dialog.FileName : null;
         }
 
-        public void WriteAccountsToFile()
+        public static void WriteAccountsToFile()
         {
-            string xmlAccounts = this.ToXML<AccountList>(AccountList);
+            string xmlAccounts = ToXML<AccountList>(AccountList);
             StreamWriter file = new System.IO.StreamWriter(settingsSave + "\\accounts.ini");
             file.Write(Crypto.Encrypt(xmlAccounts));
             file.Close();
@@ -134,7 +140,7 @@ namespace SteamAccountSwitcher.UserControls
             }
         }
 
-        private string ToXML<T>(T obj)
+        private static string ToXML<T>(T obj)
         {
             using (StringWriter stringWriter = new StringWriter(new StringBuilder()))
             {
